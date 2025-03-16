@@ -1,30 +1,30 @@
-﻿@model Product
+﻿@model ProductDetailViewModel
 
 @{
-    ViewData["Title"] = Model.Name + " Detay";
+    ViewData["Title"] = Model.Product.Name + " Detay";
 }
 
 <div class="row">
     <div class="col">
-        <img src="/Img/@Model.Image" class="img-fluid" alt="@Model.Name" title="@Model.Name" />
+        <img src="/Img/@Model.Product.Image" class="img-fluid" alt="@Model.Product.Name" title="@Model.Product.Name" />
     </div>
     <div class="col">
-        <h1>@Model.Name</h1>
+        <h1>@Model.Product.Name</h1>
         <table class="table">
             <tr>
                 <td>
                     <i>Marka</i>
                 </td>
-                <td>@Model.Brand.Name</td>
+                <td>@Model.Product.Brand.Name</td>
             </tr>
             <tr>
                 <td>Kategori</td>
-                <td>@Model.Category.Name</td>
+                <td>@Model.Product.Category.Name</td>
             </tr>
         </table>
         <h4>Ürün Açıklaması</h4>
         <p>
-            @Html.Raw(Model.Description)
+            @Html.Raw(Model.Product.Description)
         </p>
     </div>
 </div>

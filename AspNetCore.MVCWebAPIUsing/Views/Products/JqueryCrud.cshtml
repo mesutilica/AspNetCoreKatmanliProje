@@ -106,14 +106,15 @@
 </div>
 @section Scripts {
     <script>
-        $.get('https://localhost:7116/api/Products', function (data) {
+        var apiUrl = 'http://localhost:5194/api/';
+        $.get(apiUrl + 'Products', function (data) {
             // console.log(data)
             // Ekrandaki div elementini seç
             let div = $('#products');
             // Ürünleri div içine yazdır
             data.forEach(item => {
                 div.append(`<tr data-id="${item.id}"><td><input type="checkbox" class="selectRow"></td><td>${item.id}</td><td>${item.category.name}</td><td>${item.brand.name}</td>
-                                                                                  <td><a href="/Home/ProductDetail/${item.id}"><img src="https://localhost:7116/Img/${item.image}" alt="" height="34" /></a></td>
+                                                                                  <td><a href="/Home/ProductDetail/${item.id}"><img src="http://localhost:5194/Img/${item.image}" alt="" height="34" /></a></td>
                                                                             <td>${item.name}</td>
                                                                             <td>${item.price} ₺</td>
                                                                             <td>${item.stock}</td>
@@ -131,7 +132,7 @@
 
         // Kategoriler
         function Getcategories() {
-            $.get('https://localhost:7116/api/categories', function (data) {
+            $.get(apiUrl + 'categories', function (data) {
                 // console.log(data)
                 // Ekrandaki div elementini seç
                 let elm = $('#Kategoriler');
@@ -152,7 +153,7 @@
 
         // Markalar
         function Getbrands() {
-            $.get('https://localhost:7116/api/brands', function (data) {
+            $.get(apiUrl + 'brands', function (data) {
                 // console.log(data)
                 // Ekrandaki div elementini seç
                 let elm = $('#Markalar');
@@ -199,7 +200,7 @@
             console.log(JSON.stringify(product))
             $.ajax({
                 method: 'POST',
-                url: "https://localhost:7116/api/Products/",
+                url: apiUrl + "Products",
                 // type: "json",
                 headers: { 'Content-Type': 'application/json' },
                 data: JSON.stringify(product),
@@ -216,18 +217,18 @@
         }
 
         function Edit(id) {
-            $.get('https://localhost:7116/api/Products/' + id, function (item) {
+            $.get(apiUrl + 'Products/' + id, function (item) {
                 console.log(item)
                 // Ekrandaki div elementini seç
-                $('#Id').val() = item.id;
-                $('#Kategoriler').val() = item.categoryId;
-                $('#Markalar').val() = item.brandId;
-                $('#Name').val() = item.name;
-                $('#Description').val() = item.description;
-                $('#Price').val() = item.price;
-                $('#Stock').val() = item.stock;
-                $('#ImageName').val() = item.image;
-                $("#Image").html("<img src='https://localhost:7116/Img/" + item.image + "' height='50' />")
+                $('#Id').val(item.id)
+                $('#Kategoriler').val(item.categoryId)
+                $('#Markalar').val(item.brandId)
+                $('#Name').val(item.name)
+                $('#Description').val(item.description)
+                $('#Price').val(item.price)
+                $('#Stock').val(item.stock)
+                $('#ImageName').val(item.image)
+                $("#Image").html("<img src='http://localhost:5194/Img/" + item.image + "' height='50' />")
             })
                 .catch(error => {
                     // Hata olursa konsola yazdır
@@ -267,7 +268,7 @@
             }
             $.ajax({
                 method: 'PUT',
-                url: "https://localhost:7116/api/Products/" + id,
+                url: apiUrl + "Products/" + id,
                 // type: "json",
                 headers: { 'Content-Type': 'application/json' },
                 data: JSON.stringify(product),
@@ -285,7 +286,7 @@
 
         function Delete(id) {
             $.ajax({
-                url: 'https://localhost:7116/api/Products/' + id,
+                url: apiUrl + 'Products/' + id,
                 type: 'DELETE',
                 success: function (data) {
                     //gelen sonuc
@@ -309,7 +310,7 @@
         function upload(formData) {
             try {
                 $.ajax({
-                    url: 'https://localhost:7116/api/Upload',
+                    url: apiUrl + 'Upload',
                     data: formData,
                     type: 'POST',
                     contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)

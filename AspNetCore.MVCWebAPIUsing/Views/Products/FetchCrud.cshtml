@@ -106,7 +106,8 @@
 </div>
 @section Scripts {
     <script>
-        fetch('https://localhost:7116/api/Products')
+        var apiUrl = 'http://localhost:5194/api/';
+        fetch(apiUrl + 'Products')
             .then(response => response.json()) // JSON olarak dönüştür
             .then(data => {
                 // console.log(data)
@@ -115,7 +116,7 @@
                 // Ürünleri div içine yazdır
                 data.forEach(item => {
                     div.innerHTML += `<tr><td>${item.id}</td><td>${item.category.name}</td><td>${item.brand.name}</td>
-                                                  <td><a href="/Home/ProductDetail/${item.id}"><img src="https://localhost:7116/Img/${item.image}" alt="" height="34" /></a></td>
+                                                  <td><a href="/Home/ProductDetail/${item.id}"><img src="http://localhost:5194/Img/${item.image}" alt="" height="34" /></a></td>
                                             <td>${item.name}</td>
                                             <td>${item.price} ₺</td>
                                             <td>${item.stock}</td>
@@ -133,7 +134,7 @@
 
             // Kategoriler
            function Getcategories(){
-               fetch('https://localhost:7116/api/categories')
+               fetch(apiUrl + 'categories')
             .then(response => response.json()) // JSON olarak dönüştür
             .then(data => {
                 // console.log(data)
@@ -156,7 +157,7 @@
             
             // Markalar
            function Getbrands(){
-               fetch('https://localhost:7116/api/brands')
+               fetch(apiUrl + 'brands')
             .then(response => response.json()) // JSON olarak dönüştür
             .then(data => {
                 // console.log(data)
@@ -189,7 +190,7 @@
             //formData.append("username", "abc123");
             formData.append("formFile", fileField.files[0]);
 
-            fetch('https://localhost:7116/api/Products/', {
+            fetch(apiUrl + 'Products/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -221,7 +222,7 @@
         }
 
         function Edit(id) {
-            fetch('https://localhost:7116/api/Products/' + id)
+            fetch(apiUrl + 'Products/' + id)
                 .then(response => response.json()) // JSON olarak dönüştür
                 .then(item => {
                     console.log(item)
@@ -234,7 +235,7 @@
                     document.getElementById('Price').value = item.price;
                     document.getElementById('Stock').value = item.stock;
                     document.getElementById('ImageName').value = item.image;
-                    document.getElementById("Image").innerHTML = "<img src='https://localhost:7116/Img/" + item.image + "' height='50' />"
+                    document.getElementById("Image").innerHTML = "<img src='http://localhost:5194/Img/" + item.image + "' height='50' />"
                 })
                 .catch(error => {
                     // Hata olursa konsola yazdır
@@ -261,7 +262,7 @@
                 resim = formData.get("formFile").name
             }
 
-            fetch('https://localhost:7116/api/Products/' + id, {
+            fetch(apiUrl + 'Products/' + id, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -296,7 +297,7 @@
 
         function Delete(id) {
             if (confirm('Kaydı silmek istediğinize emin misiniz?')) {
-                fetch('https://localhost:7116/api/Products/' + id, {
+                fetch(apiUrl + 'Products/' + id, {
                     method: 'DELETE',
                 })
                     .then((data) => {
@@ -312,7 +313,7 @@
         // file upload
         async function upload(formData) {
             try {
-                const response = await fetch("https://localhost:7116/api/Upload", {
+                const response = await fetch(apiUrl + "Upload", {
                     method: "POST",
                     body: formData,
                 });
