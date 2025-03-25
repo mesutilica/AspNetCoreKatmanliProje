@@ -48,8 +48,9 @@
 
 @section Scripts {
     <script>
+        var apiUrl = 'http://localhost:5194/api/';
         function GetAll() {
-            fetch('http://localhost:5194/api/Brands')
+            fetch(apiUrl + 'Brands')
                 .then(response => response.json()) // JSON olarak dönüştür
                 .then(data => {
                     // console.log(data)
@@ -75,7 +76,7 @@
         }
         GetAll();
         function edit(id) {
-            fetch('http://localhost:5194/api/Brands/' + id)
+            fetch(apiUrl + 'Brands/' + id)
                 .then(response => response.json()) // JSON olarak dönüştür
                 .then(item => {
                     console.log(item)
@@ -84,7 +85,7 @@
                     document.getElementsByName('Name')[0].value = item.name;
                     document.getElementsByName('Description')[0].value = item.description;
                     document.getElementsByName('LogoName')[0].value = item.logo;
-                    document.getElementById("logo").innerHTML = "<img src='https://localhost:7116/Img/" + item.logo + "' height='50' />"
+                    document.getElementById("logo").innerHTML = "<img src='http://localhost:5194/Img/" + item.logo + "' height='50' />"
                 })
                 .catch(error => {
                     // Hata olursa konsola yazdır
@@ -100,7 +101,7 @@
             //formData.append("username", "abc123");
             formData.append("formFile", fileField.files[0]);
 
-            fetch('http://localhost:5194/api/Brands/', {
+            fetch(apiUrl + 'Brands/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -151,7 +152,7 @@
                 resim = formData.get("formFile").name
             }
 
-            fetch('http://localhost:5194/api/Brands/' + id, {
+            fetch(apiUrl + 'Brands/' + id, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -181,8 +182,8 @@
 
         }
         function Delete(id) {
-            if (confirm('Öğrenciyi silmek istediğinize emin misiniz?')) {
-                fetch('http://localhost:5194/api/Brands/' + id, {
+            if (confirm('Kaydı silmek istediğinize emin misiniz?')) {
+                fetch(apiUrl + 'Brands/' + id, {
                     method: 'DELETE',
                 })
                     .then((data) => {
@@ -198,7 +199,7 @@
         // file upload
         async function upload(formData) {
             try {
-                const response = await fetch("http://localhost:5194/api/Upload", {
+                const response = await fetch(apiUrl + "Upload", {
                     method: "POST",
                     body: formData,
                 });

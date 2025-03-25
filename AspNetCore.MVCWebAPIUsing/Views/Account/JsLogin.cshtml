@@ -42,7 +42,7 @@
         <p class="mt-5 mb-3 text-muted">© 2017–2022</p>
     </div>
 </div>
-@Context.Session.Id
+
 @section scripts {
     <script>
         function Login() {
@@ -63,7 +63,7 @@
             console.log(JSON.stringify(UserLoginModel))
             $.ajax({
                 method: 'POST',
-                url: "https://localhost:7116/Api/Auth/Login",
+                url: "http://localhost:5194/Api/Auth/Login",
                 // type: "json",
                 headers: { 'Content-Type': 'application/json' },
                 data: JSON.stringify(UserLoginModel),
