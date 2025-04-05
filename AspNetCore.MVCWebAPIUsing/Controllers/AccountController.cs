@@ -14,11 +14,20 @@ namespace AspNetCoreMVCWebAPIUsing.Controllers
         public AccountController(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _apiAdres = "https://localhost:7116/Api/Auth/";
+            _apiAdres = "http://localhost:5194/Api/Auth/";
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            if (HttpContext.Session.GetString("userToken") is not null)
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("userToken"));
+                var model = await _httpClient.GetFromJsonAsync<User>(_apiAdres + "GetUserByUserGuid/" + HttpContext.Session.GetString("refreshToken"));
+                return View(model);
+            }
+            else
+            {
+                return NotFound();
+            }            
         }
         public IActionResult JsLogin()
         {
@@ -41,7 +50,10 @@ namespace AspNetCoreMVCWebAPIUsing.Controllers
                     if (jwt is not null)
                     {
                         HttpContext.Session.SetString("userToken", jwt.AccessToken);
+                        HttpContext.Session.SetString("refreshToken", jwt.RefreshToken);
                     }
+                    else
+                        HttpContext.Session.SetString("userToken", "jwt.AccessToken is null");
                     return RedirectToAction(nameof(Index));
                 }
                 ModelState.AddModelError("", "Giriş Başarısız!");

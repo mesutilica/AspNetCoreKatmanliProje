@@ -8,8 +8,8 @@ namespace AspNetCoreMVCWebAPIUsing.Areas.Admin.Controllers
     public class SlidersController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiAdres = "https://localhost:7116/Api/Sliders";
-        private readonly string _apiAdres2 = "https://localhost:7116/Api/Upload/";
+        private readonly string _apiAdres = "http://localhost:5194/Api/Sliders";
+        private readonly string _apiAdres2 = "http://localhost:5194/Api/Upload/";
 
         public SlidersController(HttpClient httpClient)
         {

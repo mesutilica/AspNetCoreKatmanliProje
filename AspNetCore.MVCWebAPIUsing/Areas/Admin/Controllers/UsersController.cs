@@ -7,7 +7,7 @@ namespace AspNetCoreMVCWebAPIUsing.Areas.Admin.Controllers
     public class UsersController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiAdres = "https://localhost:7116/Api/Users";
+        private readonly string _apiAdres = "http://localhost:5194/Api/Users";
 
         public UsersController(HttpClient httpClient)
         {

@@ -25,11 +25,11 @@
             @TempData["Mesaj"]
         </div>
         <div class="form-floating">
-            <input class="form-control" id="Email" required placeholder="name@example.com" autocomplete="new-email" autofocus="true" value="admin@admin.com">
+            <input class="form-control" id="Email" required placeholder="name@example.com" value="admin@admin.com">
             <label for="Email">Email</label>
         </div>
         <div class="form-floating">
-            <input class="form-control" id="Password" placeholder="Password" autocomplete="new-password" required>
+            <input class="form-control" id="Password" placeholder="Password" autocomplete="new-password" value="123" required>
             <label for="Password">Şifre</label>
         </div>
 
@@ -72,8 +72,7 @@
                     console.log(data);
                     localStorage.setItem("token", data.accessToken);
                     sessionStorage.refreshToken = data.refreshToken;
-
-                    sessionStorage["token3"] = data.accessToken;
+                    sessionStorage["userExpiration"] = data.expiration;
 
                     // localStorage.removeItem("token");
                     // localStorage.clear();

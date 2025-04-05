@@ -158,7 +158,7 @@
                     document.getElementById('Description').value = item.description;
                     document.getElementById('IsActive').checked = item.isActive;
                     document.getElementById('ImageName').value = item.image;
-                    document.getElementById("Image").innerHTML = "<img src='https://localhost:7116/Img/" + item.image + "' height='50' />"
+                    document.getElementById("Image").innerHTML = "<img src='http://localhost:5194/Img/" + item.image + "' height='50' />"
                 })
                 .catch(error => {
                     // Hata olursa konsola yazdır

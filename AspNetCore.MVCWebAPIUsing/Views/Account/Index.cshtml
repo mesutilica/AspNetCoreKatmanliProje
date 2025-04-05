@@ -1,4 +1,4 @@
-﻿
+﻿@model User
 @{
     ViewData["Title"] = "Hesabım";
 }
@@ -9,51 +9,54 @@
     @Context.Session.GetString("userToken")
 </div>
 
+<h5>
+    @Context.Session.GetString("refreshToken")
+</h5>
+
 <div id="kullanici">
     <div class="row">
         <div class="col-md-4">
-            <form action="/Admin/Users/Edit/1" method="post">
-
-                <input type="hidden" data-val="true" data-val-required="The Id field is required." id="Id" name="Id" value="">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
                 <div class="form-group">
-                    <label class="control-label" for="UserName">Kullanıcı Adı</label>
-                    <input class="form-control" type="text" data-val="true" data-val-length="The field Kullanıcı Adı must be a string with a maximum length of 50." data-val-length-max="50" data-val-required="The Kullanıcı Adı field is required." id="UserName" maxlength="50" name="UserName" value="">
-                    <span class="text-danger field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="Password">Şifre</label>
-                    <input class="form-control" type="text" data-val="true" data-val-length="The field Şifre must be a string with a maximum length of 50." data-val-length-max="50" data-val-required="The Şifre field is required." id="Password" maxlength="50" name="Password" value="">
-                    <span class="text-danger field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="Email">Email</label>
-                    <input class="form-control" type="text" data-val="true" data-val-length="The field Email must be a string with a maximum length of 50." data-val-length-max="50" id="Email" maxlength="50" name="Email" value="">
-                    <span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="Name">Adı</label>
-                    <input class="form-control" type="text" data-val="true" data-val-length="The field Adı must be a string with a maximum length of 50." data-val-length-max="50" id="Name" maxlength="50" name="Name" value="">
-                    <span class="text-danger field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="Surname">Soyadı</label>
-                    <input class="form-control" type="text" data-val="true" data-val-length="The field Soyadı must be a string with a maximum length of 50." data-val-length-max="50" id="Surname" maxlength="50" name="Surname" value="">
-                    <span class="text-danger field-validation-valid" data-valmsg-for="Surname" data-valmsg-replace="true"></span>
+                    <label asp-for="Surname" class="control-label"></label>
+                    <input asp-for="Surname" class="form-control" />
+                    <span asp-validation-for="Surname" class="text-danger"></span>
                 </div>
                 <div class="form-group form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" checked="checked" data-val-required="The Aktif? field is required." id="IsActive" name="IsActive" value=""> Aktif?
+                        <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
                     </label>
                 </div>
                 <div class="form-group form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" checked="checked" data-val-required="The Admin? field is required." id="IsAdmin" name="IsAdmin" value=""> Admin?
+                        <input class="form-check-input" asp-for="IsAdmin" /> @Html.DisplayNameFor(model => model.IsAdmin)
                     </label>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Kaydet" class="btn btn-primary">
+                    <input type="submit" value="Kaydet" class="btn btn-primary" />
                 </div>
-                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8ErMAdHy665AgKSjXgXd3jHC-fhYygWm7NcmL499sCJQxLXZ-8zHfr3g4rG0xBYkwLYHiI7qtwYFhzhUM_V3jjusePGhUUdupI76OfFF1urHibqk5OJgtIH8BwELMkrzKwH7e4jzA5S84Kev9qaemeo"><input name="IsActive" type="hidden" value=""><input name="IsAdmin" type="hidden" value="">
             </form>
         </div>
     </div>
@@ -63,13 +66,15 @@
     <script>
         var token = localStorage.getItem("token");
         var refreshToken = sessionStorage.refreshToken;
+        var userExpiration = sessionStorage["userExpiration"];
         if (token && refreshToken) {
             console.log(token)
-            console.log(refreshToken)
+            console.warn(refreshToken)
+            console.log(userExpiration)
 
             $.ajax({
                 method: 'GET',
-                url: "https://localhost:7116/api/Users/GetUserByUserGuid/" + refreshToken,
+                url: "http://localhost:5194/api/Auth/GetUserByUserGuid/" + refreshToken,
                 // type: "json",
                 headers: { 'Content-Type': 'application/json', "Authorization": "Bearer " + token },
                 // data: JSON.stringify(product),

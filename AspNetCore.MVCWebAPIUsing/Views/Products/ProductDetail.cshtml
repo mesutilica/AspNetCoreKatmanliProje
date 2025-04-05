@@ -12,7 +12,7 @@
     <script>
         let images = document.getElementById('images');
         let div = document.getElementById('detail');
-        fetch('https://localhost:7116/api/Products/' + @Context.GetRouteValue("id"))
+        fetch('http://localhost:5194/api/Products/' + @Context.GetRouteValue("id"))
             .then(res => res.json())
             .then(product => {
                 images.innerHTML += `<div class="col">

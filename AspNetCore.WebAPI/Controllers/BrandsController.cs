@@ -46,7 +46,6 @@ namespace AspNetCoreWebAPI.Controllers
         }
 
         // PUT: api/Brands/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBrand(int id, Brand brand)
         {
@@ -77,7 +76,6 @@ namespace AspNetCoreWebAPI.Controllers
         }
 
         // POST: api/Brands
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Brand>> PostBrand(Brand brand)
         {

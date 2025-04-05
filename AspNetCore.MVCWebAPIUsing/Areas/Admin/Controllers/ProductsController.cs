@@ -10,7 +10,7 @@ namespace AspNetCoreMVCWebAPIUsing.Areas.Admin.Controllers
     {
         private readonly HttpClient _httpClient;
 
-        private readonly string _apiAdres = "https://localhost:7116/api/";
+        private readonly string _apiAdres = "http://localhost:5194/api/";
 
         public ProductsController(HttpClient httpClient)
         {
