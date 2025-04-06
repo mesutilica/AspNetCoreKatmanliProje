@@ -26,17 +26,20 @@ namespace AspNetCoreMVCProjesi.Controllers
             try
             {
                 var kullanici = await _databaseContext.Users.FirstOrDefaultAsync(k => k.Email == email && k.Password == password && k.IsActive);
-                if (kullanici == null) TempData["Mesaj"] = "Giriş Başarısız!";
+                if (kullanici == null) 
+                    TempData["Mesaj"] = "Giriş Başarısız!";
                 else
                 {
                     var haklar = new List<Claim>() // Claim = Hak
                     {
                         new Claim(ClaimTypes.Email, kullanici.Email) // kullanıcıya hak tanımladık
                     };
-                    var kullaniciKimligi = new ClaimsIdentity(haklar, "Login");
-                    ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(kullaniciKimligi);
+                    //var kullaniciKimligi = new ClaimsIdentity(haklar, "Login");
+                    var kullaniciKimligi = new ClaimsIdentity(ClaimsIdentity.DefaultNameClaimType);
+                    var claimsPrincipal = new ClaimsPrincipal(kullaniciKimligi);
                     await HttpContext.SignInAsync(claimsPrincipal);
-                    if (kullanici.IsAdmin) return Redirect("/Admin");
+                    if (kullanici.IsAdmin) 
+                        return Redirect("/Admin");
                     else return Redirect("/Home");
                 }
             }

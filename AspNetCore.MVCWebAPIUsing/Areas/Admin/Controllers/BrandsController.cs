@@ -3,6 +3,7 @@ using AspNetCoreMVCWebAPIUsing.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http;
 using System.Text;
 
 namespace AspNetCoreMVCWebAPIUsing.Areas.Admin.Controllers
@@ -10,19 +11,25 @@ namespace AspNetCoreMVCWebAPIUsing.Areas.Admin.Controllers
     [Area("Admin"), Authorize]
     public class BrandsController : Controller
     {
-        static string apiAdres = "https://localhost:7116/Api/Brands/";
-        HttpClient client = new HttpClient(); // .net framework deki yapıyı kullanarak
+        static string _apiAdres = "http://localhost:5194/Api/Brands/";
+        HttpClient _httpClient = new HttpClient(); // .net framework deki yapıyı kullanarak
         // GET: Admin/Brands
         public async Task<ActionResult> Index()
         {
-            var response = await client.GetAsync(apiAdres);
+            if (HttpContext.Session.GetString("userToken") is not null)
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("userToken"));
+                //var model = await _httpClient.GetFromJsonAsync<User>(_apiAdres + "GetUserByUserGuid/" + HttpContext.Session.GetString("refreshToken"));
+                //return View(model);
+            }
+            var response = await _httpClient.GetAsync(_apiAdres);
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync(); //JSON verisini oku
                 var model = JsonConvert.DeserializeObject<List<Brand>>(data); //JSON verisini Post listesine dönüştür
                 return View(model);
             }
-            return NotFound();
+            return NotFound(response.StatusCode.ToString());
         }
 
         // GET: Admin/Brands/Details/5
@@ -48,7 +55,7 @@ namespace AspNetCoreMVCWebAPIUsing.Areas.Admin.Controllers
                     collection.Logo = await FileHelper.FileLoaderAsync(Logo);
                     var json = JsonConvert.SerializeObject(collection);
                     var data = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(apiAdres, data);
+                    var response = await _httpClient.PostAsync(_apiAdres, data);
                     if (response.IsSuccessStatusCode)
                         return RedirectToAction("Index");
                 }
@@ -63,7 +70,7 @@ namespace AspNetCoreMVCWebAPIUsing.Areas.Admin.Controllers
         // GET: Admin/Brands/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var response = await client.GetAsync(apiAdres + id);
+            var response = await _httpClient.GetAsync(_apiAdres + id);
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync(); //JSON verisini oku
@@ -87,7 +94,7 @@ namespace AspNetCoreMVCWebAPIUsing.Areas.Admin.Controllers
                         collection.Logo = await FileHelper.FileLoaderAsync(Logo);
                     var json = JsonConvert.SerializeObject(collection);
                     var data = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await client.PutAsync(apiAdres + id, data);
+                    var response = await _httpClient.PutAsync(_apiAdres + id, data);
                     if (response.IsSuccessStatusCode)
                         return RedirectToAction("Index");
                 }
@@ -102,7 +109,7 @@ namespace AspNetCoreMVCWebAPIUsing.Areas.Admin.Controllers
         // GET: Admin/Brands/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var response = await client.GetAsync(apiAdres + id);
+            var response = await _httpClient.GetAsync(_apiAdres + id);
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync(); //JSON verisini oku
@@ -118,7 +125,7 @@ namespace AspNetCoreMVCWebAPIUsing.Areas.Admin.Controllers
         {
             try
             {
-                var response = await client.DeleteAsync(apiAdres + id);
+                var response = await _httpClient.DeleteAsync(_apiAdres + id);
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction("Index");
             }

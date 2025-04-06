@@ -1,7 +1,10 @@
 ﻿using AspNetCore.Entities;
 using AspNetCore.Entities.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AspNetCoreMVCWebAPIUsing.Controllers
 {
@@ -16,6 +19,7 @@ namespace AspNetCoreMVCWebAPIUsing.Controllers
             _httpClient = httpClient;
             _apiAdres = "http://localhost:5194/Api/Auth/";
         }
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             if (HttpContext.Session.GetString("userToken") is not null)
@@ -51,6 +55,15 @@ namespace AspNetCoreMVCWebAPIUsing.Controllers
                     {
                         HttpContext.Session.SetString("userToken", jwt.AccessToken);
                         HttpContext.Session.SetString("refreshToken", jwt.RefreshToken);
+
+                        var haklar = new List<Claim>() // Claim = Hak
+                    {
+                        new Claim(ClaimTypes.UserData, jwt.RefreshToken) // kullanıcıya hak tanımladık
+                    };
+                        //var kullaniciKimligi = new ClaimsIdentity(haklar, "Login");
+                        var kullaniciKimligi = new ClaimsIdentity(haklar, ClaimsIdentity.DefaultNameClaimType);
+                        var claimsPrincipal = new ClaimsPrincipal(kullaniciKimligi);
+                        await HttpContext.SignInAsync(claimsPrincipal);
                     }
                     else
                         HttpContext.Session.SetString("userToken", "jwt.AccessToken is null");
